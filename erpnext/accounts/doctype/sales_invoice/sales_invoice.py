@@ -26,8 +26,6 @@ from frappe.model.utils import get_fetch_values
 from frappe.contacts.doctype.address.address import get_address_display
 from erpnext.accounts.doctype.tax_withholding_category.tax_withholding_category import get_party_tax_withholding_details
 
-from erpnext.healthcare.utils import manage_invoice_submit_cancel
-
 from six import iteritems
 
 form_grid_templates = {
@@ -250,9 +248,6 @@ class SalesInvoice(SellingController):
 		domain_settings = frappe.get_doc('Domain Settings')
 		active_domains = [d.domain for d in domain_settings.active_domains]
 
-		if "Healthcare" in active_domains:
-			manage_invoice_submit_cancel(self, "on_submit")
-
 	def validate_pos_return(self):
 
 		if self.is_pos and self.is_return:
@@ -337,8 +332,6 @@ class SalesInvoice(SellingController):
 		domain_settings = frappe.get_doc('Domain Settings')
 		active_domains = [d.domain for d in domain_settings.active_domains]
 
-		if "Healthcare" in active_domains:
-			manage_invoice_submit_cancel(self, "on_cancel")
 		self.unlink_sales_invoice_from_timesheets()
 		self.ignore_linked_doctypes = ('GL Entry', 'Stock Ledger Entry', 'Repost Item Valuation')
 
@@ -922,7 +915,7 @@ class SalesInvoice(SellingController):
 						asset = frappe.get_doc("Asset", item.asset)
 					else:
 						frappe.throw(_(
-							"Row #{0}: You must select an Asset for Item {1}.").format(item.idx, item.item_name), 
+							"Row #{0}: You must select an Asset for Item {1}.").format(item.idx, item.item_name),
 							title=_("Missing Asset")
 						)
 					if (len(asset.finance_books) > 1 and not item.finance_book
@@ -944,7 +937,7 @@ class SalesInvoice(SellingController):
 						gl_entries.append(self.get_gl_dict(gle, item=item))
 
 					self.set_asset_status(asset)
-				
+
 				else:
 					# Do not book income for transfer within same company
 					if not self.is_internal_transfer():
@@ -973,7 +966,7 @@ class SalesInvoice(SellingController):
 	def set_asset_status(self, asset):
 		if self.is_return:
 			asset.set_status()
-		else: 	
+		else:
 			asset.set_status("Sold" if self.docstatus==1 else None)
 
 	def make_loyalty_point_redemption_gle(self, gl_entries):
@@ -1497,7 +1490,7 @@ def get_bank_cash_account(mode_of_payment, company):
 
 @frappe.whitelist()
 def make_maintenance_schedule(source_name, target_doc=None):
-	doclist = get_mapped_doc("Sales Invoice", source_name, 	{
+	doclist = get_mapped_doc("Sales Invoice", source_name,	{
 		"Sales Invoice": {
 			"doctype": "Maintenance Schedule",
 			"validation": {
@@ -1526,7 +1519,7 @@ def make_delivery_note(source_name, target_doc=None):
 		target_doc.base_amount = target_doc.qty * flt(source_doc.base_rate)
 		target_doc.amount = target_doc.qty * flt(source_doc.rate)
 
-	doclist = get_mapped_doc("Sales Invoice", source_name, 	{
+	doclist = get_mapped_doc("Sales Invoice", source_name,	{
 		"Sales Invoice": {
 			"doctype": "Delivery Note",
 			"validation": {
@@ -1918,9 +1911,9 @@ def create_dunning(source_name, target_doc=None):
 		overdue_days = (getdate(target.posting_date) - getdate(source.due_date)).days
 		target.overdue_days = overdue_days
 		if frappe.db.exists('Dunning Type', {'start_day': [
-	                                '<', overdue_days], 'end_day': ['>=', overdue_days]}):
+									'<', overdue_days], 'end_day': ['>=', overdue_days]}):
 			dunning_type = frappe.get_doc('Dunning Type', {'start_day': [
-	                                '<', overdue_days], 'end_day': ['>=', overdue_days]})
+									'<', overdue_days], 'end_day': ['>=', overdue_days]})
 			target.dunning_type = dunning_type.name
 			target.rate_of_interest = dunning_type.rate_of_interest
 			target.dunning_fee = dunning_type.dunning_fee
