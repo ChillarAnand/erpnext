@@ -26,8 +26,6 @@ from frappe.model.utils import get_fetch_values
 from frappe.contacts.doctype.address.address import get_address_display
 from erpnext.accounts.doctype.tax_withholding_category.tax_withholding_category import get_party_tax_withholding_details
 
-from erpnext.healthcare.utils import manage_invoice_submit_cancel
-
 from six import iteritems
 
 form_grid_templates = {
@@ -250,9 +248,6 @@ class SalesInvoice(SellingController):
 		domain_settings = frappe.get_doc('Domain Settings')
 		active_domains = [d.domain for d in domain_settings.active_domains]
 
-		if "Healthcare" in active_domains:
-			manage_invoice_submit_cancel(self, "on_submit")
-
 	def validate_pos_return(self):
 
 		if self.is_pos and self.is_return:
@@ -337,8 +332,6 @@ class SalesInvoice(SellingController):
 		domain_settings = frappe.get_doc('Domain Settings')
 		active_domains = [d.domain for d in domain_settings.active_domains]
 
-		if "Healthcare" in active_domains:
-			manage_invoice_submit_cancel(self, "on_cancel")
 		self.unlink_sales_invoice_from_timesheets()
 		self.ignore_linked_doctypes = ('GL Entry', 'Stock Ledger Entry', 'Repost Item Valuation')
 
@@ -922,7 +915,7 @@ class SalesInvoice(SellingController):
 						asset = frappe.get_doc("Asset", item.asset)
 					else:
 						frappe.throw(_(
-							"Row #{0}: You must select an Asset for Item {1}.").format(item.idx, item.item_name), 
+							"Row #{0}: You must select an Asset for Item {1}.").format(item.idx, item.item_name),
 							title=_("Missing Asset")
 						)
 					if (len(asset.finance_books) > 1 and not item.finance_book
@@ -944,7 +937,7 @@ class SalesInvoice(SellingController):
 						gl_entries.append(self.get_gl_dict(gle, item=item))
 
 					self.set_asset_status(asset)
-				
+
 				else:
 					# Do not book income for transfer within same company
 					if not self.is_internal_transfer():
@@ -973,7 +966,7 @@ class SalesInvoice(SellingController):
 	def set_asset_status(self, asset):
 		if self.is_return:
 			asset.set_status()
-		else: 	
+		else:
 			asset.set_status("Sold" if self.docstatus==1 else None)
 
 	def make_loyalty_point_redemption_gle(self, gl_entries):
@@ -1312,45 +1305,6 @@ class SalesInvoice(SellingController):
 			points_to_redeem -= redeemed_points
 			if points_to_redeem < 1: # since points_to_redeem is integer
 				break
-
-	# Healthcare
-	@frappe.whitelist()
-	def set_healthcare_services(self, checked_values):
-		self.set("items", [])
-		from erpnext.stock.get_item_details import get_item_details
-		for checked_item in checked_values:
-			item_line = self.append("items", {})
-			price_list, price_list_currency = frappe.db.get_values("Price List", {"selling": 1}, ['name', 'currency'])[0]
-			args = {
-				'doctype': "Sales Invoice",
-				'item_code': checked_item['item'],
-				'company': self.company,
-				'customer': frappe.db.get_value("Patient", self.patient, "customer"),
-				'selling_price_list': price_list,
-				'price_list_currency': price_list_currency,
-				'plc_conversion_rate': 1.0,
-				'conversion_rate': 1.0
-			}
-			item_details = get_item_details(args)
-			item_line.item_code = checked_item['item']
-			item_line.qty = 1
-			if checked_item['qty']:
-				item_line.qty = checked_item['qty']
-			if checked_item['rate']:
-				item_line.rate = checked_item['rate']
-			else:
-				item_line.rate = item_details.price_list_rate
-			item_line.amount = float(item_line.rate) * float(item_line.qty)
-			if checked_item['income_account']:
-				item_line.income_account = checked_item['income_account']
-			if checked_item['dt']:
-				item_line.reference_dt = checked_item['dt']
-			if checked_item['dn']:
-				item_line.reference_dn = checked_item['dn']
-			if checked_item['description']:
-				item_line.description = checked_item['description']
-
-		self.set_missing_values(for_validate = True)
 
 	def set_status(self, update=False, status=None, update_modified=True):
 		if self.is_new():

@@ -29,7 +29,6 @@ def get_industry_types():
 		_('Financial Services'),
 		_('Food, Beverage & Tobacco'),
 		_('Grocery'),
-		_('Health Care'),
 		_('Internet Publishing'),
 		_('Investment Banking'),
 		_('Legal'),

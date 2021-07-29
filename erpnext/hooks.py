@@ -68,7 +68,6 @@ domains = {
 	'Agriculture': 'erpnext.domains.agriculture',
 	'Distribution': 'erpnext.domains.distribution',
 	'Education': 'erpnext.domains.education',
-	'Healthcare': 'erpnext.domains.healthcare',
 	'Hospitality': 'erpnext.domains.hospitality',
 	'Manufacturing': 'erpnext.domains.manufacturing',
 	'Non Profit': 'erpnext.domains.non_profit',
@@ -316,7 +315,6 @@ doc_events = {
 # if payment entry not in auto cancel exempted doctypes it will cancel payment entry.
 auto_cancel_exempted_doctypes= [
 	"Payment Entry",
-	"Inpatient Medication Entry"
 ]
 
 after_migrate = ["erpnext.setup.install.update_select_perm_after_install"]
@@ -516,32 +514,6 @@ global_search_doctypes = {
 		{"doctype": "Maintenance Schedule", "index": 45},
 		{"doctype": "Maintenance Visit", "index": 46},
 		{"doctype": "Warranty Claim", "index": 47},
-	],
-	"Healthcare": [
-		{'doctype': 'Patient', 'index': 1},
-		{'doctype': 'Medical Department', 'index': 2},
-		{'doctype': 'Vital Signs', 'index': 3},
-		{'doctype': 'Healthcare Practitioner', 'index': 4},
-		{'doctype': 'Patient Appointment', 'index': 5},
-		{'doctype': 'Healthcare Service Unit', 'index': 6},
-		{'doctype': 'Patient Encounter', 'index': 7},
-		{'doctype': 'Antibiotic', 'index': 8},
-		{'doctype': 'Diagnosis', 'index': 9},
-		{'doctype': 'Lab Test', 'index': 10},
-		{'doctype': 'Clinical Procedure', 'index': 11},
-		{'doctype': 'Inpatient Record', 'index': 12},
-		{'doctype': 'Sample Collection', 'index': 13},
-		{'doctype': 'Patient Medical Record', 'index': 14},
-		{'doctype': 'Appointment Type', 'index': 15},
-		{'doctype': 'Fee Validity', 'index': 16},
-		{'doctype': 'Practitioner Schedule', 'index': 17},
-		{'doctype': 'Dosage Form', 'index': 18},
-		{'doctype': 'Lab Test Sample', 'index': 19},
-		{'doctype': 'Prescription Duration', 'index': 20},
-		{'doctype': 'Prescription Dosage', 'index': 21},
-		{'doctype': 'Sensitivity', 'index': 22},
-		{'doctype': 'Complaint', 'index': 23},
-		{'doctype': 'Medical Code', 'index': 24},
 	],
 	"Education": [
 		{'doctype': 'Article', 'index': 1},
