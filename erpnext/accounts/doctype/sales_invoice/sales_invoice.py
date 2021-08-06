@@ -1306,6 +1306,45 @@ class SalesInvoice(SellingController):
 			if points_to_redeem < 1: # since points_to_redeem is integer
 				break
 
+	# Healthcare
+	@frappe.whitelist()
+	def set_healthcare_services(self, checked_values):
+		self.set("items", [])
+		from erpnext.stock.get_item_details import get_item_details
+		for checked_item in checked_values:
+			item_line = self.append("items", {})
+			price_list, price_list_currency = frappe.db.get_values("Price List", {"selling": 1}, ['name', 'currency'])[0]
+			args = {
+				'doctype': "Sales Invoice",
+				'item_code': checked_item['item'],
+				'company': self.company,
+				'customer': frappe.db.get_value("Patient", self.patient, "customer"),
+				'selling_price_list': price_list,
+				'price_list_currency': price_list_currency,
+				'plc_conversion_rate': 1.0,
+				'conversion_rate': 1.0
+			}
+			item_details = get_item_details(args)
+			item_line.item_code = checked_item['item']
+			item_line.qty = 1
+			if checked_item['qty']:
+				item_line.qty = checked_item['qty']
+			if checked_item['rate']:
+				item_line.rate = checked_item['rate']
+			else:
+				item_line.rate = item_details.price_list_rate
+			item_line.amount = float(item_line.rate) * float(item_line.qty)
+			if checked_item['income_account']:
+				item_line.income_account = checked_item['income_account']
+			if checked_item['dt']:
+				item_line.reference_dt = checked_item['dt']
+			if checked_item['dn']:
+				item_line.reference_dn = checked_item['dn']
+			if checked_item['description']:
+				item_line.description = checked_item['description']
+
+		self.set_missing_values(for_validate = True)
+
 	def set_status(self, update=False, status=None, update_modified=True):
 		if self.is_new():
 			if self.get('amended_from'):
@@ -1451,7 +1490,7 @@ def get_bank_cash_account(mode_of_payment, company):
 
 @frappe.whitelist()
 def make_maintenance_schedule(source_name, target_doc=None):
-	doclist = get_mapped_doc("Sales Invoice", source_name, 	{
+	doclist = get_mapped_doc("Sales Invoice", source_name,	{
 		"Sales Invoice": {
 			"doctype": "Maintenance Schedule",
 			"validation": {
@@ -1480,7 +1519,7 @@ def make_delivery_note(source_name, target_doc=None):
 		target_doc.base_amount = target_doc.qty * flt(source_doc.base_rate)
 		target_doc.amount = target_doc.qty * flt(source_doc.rate)
 
-	doclist = get_mapped_doc("Sales Invoice", source_name, 	{
+	doclist = get_mapped_doc("Sales Invoice", source_name,	{
 		"Sales Invoice": {
 			"doctype": "Delivery Note",
 			"validation": {
@@ -1872,9 +1911,9 @@ def create_dunning(source_name, target_doc=None):
 		overdue_days = (getdate(target.posting_date) - getdate(source.due_date)).days
 		target.overdue_days = overdue_days
 		if frappe.db.exists('Dunning Type', {'start_day': [
-	                                '<', overdue_days], 'end_day': ['>=', overdue_days]}):
+									'<', overdue_days], 'end_day': ['>=', overdue_days]}):
 			dunning_type = frappe.get_doc('Dunning Type', {'start_day': [
-	                                '<', overdue_days], 'end_day': ['>=', overdue_days]})
+									'<', overdue_days], 'end_day': ['>=', overdue_days]})
 			target.dunning_type = dunning_type.name
 			target.rate_of_interest = dunning_type.rate_of_interest
 			target.dunning_fee = dunning_type.dunning_fee
