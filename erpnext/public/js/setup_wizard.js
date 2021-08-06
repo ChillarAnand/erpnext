@@ -28,6 +28,7 @@ erpnext.setup.slides_settings = [
 					{ "label": __("Retail"), "value": "Retail" },
 					{ "label": __("Services"), "value": "Services" },
 					{ "label": __("Agriculture (beta)"), "value": "Agriculture" },
+					{ "label": __("Healthcare (beta)"), "value": "Healthcare" },
 					{ "label": __("Non Profit (beta)"), "value": "Non Profit" }
 				], reqd: 1
 			},
