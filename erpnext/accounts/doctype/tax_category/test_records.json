@@ -1,14 +1,30 @@
 [
- {
-  "doctype": "Tax Category",
-  "title": "_Test Tax Category 1"
- },
- {
-  "doctype": "Tax Category",
-  "title": "_Test Tax Category 2"
- },
- {
-  "doctype": "Tax Category",
-  "title": "_Test Tax Category 3"
- }
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 1"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 2"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 3"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 4"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 5"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 6"
+  },
+  {
+    "doctype": "Tax Category",
+    "title": "_Test Tax Category 7"
+  }
 ]

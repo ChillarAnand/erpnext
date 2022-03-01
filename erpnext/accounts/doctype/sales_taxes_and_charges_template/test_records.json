@@ -2,6 +2,7 @@
  {
   "company": "_Test Company",
   "doctype": "Sales Taxes and Charges Template",
+  "tax_category": "_Test Tax Category 1",
   "taxes": [
    {
     "account_head": "_Test Account VAT - _TC",
@@ -27,6 +28,7 @@
  {
   "company": "_Test Company",
   "doctype": "Sales Taxes and Charges Template",
+  "tax_category": "_Test Tax Category 2",
   "taxes": [
    {
     "account_head": "_Test Account Shipping Charges - _TC",
@@ -110,6 +112,7 @@
  {
   "company": "_Test Company",
   "doctype": "Sales Taxes and Charges Template",
+  "tax_category": "_Test Tax Category 3",
   "taxes": [
    {
     "account_head": "_Test Account VAT - _TC",
@@ -135,6 +138,7 @@
  {
   "company": "_Test Company",
   "doctype": "Sales Taxes and Charges Template",
+  "tax_category": "_Test Tax Category 4",
   "taxes": [
    {
     "account_head": "_Test Account VAT - _TC",
@@ -160,6 +164,7 @@
  {
   "company": "_Test Company",
   "doctype": "Sales Taxes and Charges Template",
+  "tax_category": "_Test Tax Category 5",
   "taxes": [
    {
     "account_head": "_Test Account VAT - _TC",
@@ -184,6 +189,7 @@
  },
  {
 	"doctype" : "Sales Taxes and Charges Template",
+    "tax_category": "_Test Tax Category 6",
 	"title": "_Test Tax 1",
 	"company": "_Test Company",
 	"taxes":[{
@@ -196,6 +202,7 @@
  },
  {
 	"doctype" : "Sales Taxes and Charges Template",
+    "tax_category": "_Test Tax Category 7",
 	"title": "_Test Tax 2",
 	"company": "_Test Company",
 	"taxes":[{
