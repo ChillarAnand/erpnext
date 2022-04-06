@@ -189,6 +189,7 @@ def get_healthcare_service_unit(unit_name=None):
 			}
 		)
 		if not service_unit_parent_name:
+			
 			parent_service_unit = frappe.new_doc("Healthcare Service Unit")
 			parent_service_unit.healthcare_service_unit_name = "_Test All Healthcare Service Units"
 			parent_service_unit.is_group = 1
