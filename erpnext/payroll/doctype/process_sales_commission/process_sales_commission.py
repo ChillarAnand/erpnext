@@ -41,7 +41,8 @@ class ProcessSalesCommission(Document):
 	def get_sales_persons_list(self, sales_persons):
 		sales_persons_list = sales_persons
 		if self.department or self.designation or self.branch:
-			sales_persons_emp = frappe.get_all("Sales Person", filters= {"name": ["in", sales_persons]}, fields=["employee"], as_dict=True)['employee']
+			sales_persons_emp = frappe.get_list("Sales Person", filters= {"name": ["in", sales_persons]}, fields=["employee"], as_list=True)
+			sales_persons_emp = [emp[0] for emp in sales_persons_emp]
 			emp_filters = {"name": ["in", sales_persons_emp], "company": self.company}
 			# for field in ["department", "designation", "branch"]:
 			if self.department:
